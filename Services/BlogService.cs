@@ -35,16 +35,21 @@ public class BlogService : IBlogService
 
     public async Task<BlogCreateRequest> CreateBlog(BlogCreateRequest blogCreateRequest)
     {
-        var blog = new Blog
+        var blog = CastBlogDto(blogCreateRequest);
+        _context.Blogs.Add(blog);
+        await _context.SaveChangesAsync();
+        return blogCreateRequest;
+    }
+
+    private static Blog CastBlogDto(BlogCreateRequest blogCreateRequest)
+    {
+        return new Blog
         {
             Title = blogCreateRequest.Title,
             Content = blogCreateRequest.Content,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        _context.Blogs.Add(blog);
-        await _context.SaveChangesAsync();
-        return blogCreateRequest;
     }
         
         
