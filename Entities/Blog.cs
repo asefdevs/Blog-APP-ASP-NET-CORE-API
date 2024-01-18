@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace newProject.Entities;
 
-
 public partial class Blog
 {
-    [Key]
     public int Id { get; set; }
 
     public string Title { get; set; } = null!;
@@ -17,4 +14,8 @@ public partial class Blog
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public int? UserId { get; set; }
+
+    public virtual User? User { get; set; }
 }

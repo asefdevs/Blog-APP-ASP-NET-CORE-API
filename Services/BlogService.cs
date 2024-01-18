@@ -48,7 +48,10 @@ public class BlogService : IBlogService
             Title = blogCreateRequest.Title,
             Content = blogCreateRequest.Content,
             CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
+            UpdatedAt = DateTime.Now,
+            UserId = blogCreateRequest.UserId
+
+            
         };
     }
         
