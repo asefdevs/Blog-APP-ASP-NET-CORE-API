@@ -15,7 +15,7 @@ public partial class Blog
 
     public DateTime UpdatedAt { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public virtual User? User { get; set; }
 }

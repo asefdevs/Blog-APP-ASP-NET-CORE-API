@@ -26,10 +26,10 @@ public partial class MyprojectdbContext : DbContext
     {
         modelBuilder.Entity<Blog>(entity =>
         {
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.UserID).HasColumnName("UserID");
 
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
-                .HasForeignKey(d => d.UserId)
+                .HasForeignKey(d => d.UserID)
                 .HasConstraintName("FK_Blogs_Users");
         });
 

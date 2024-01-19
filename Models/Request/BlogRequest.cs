@@ -16,5 +16,5 @@ public class BlogCreateRequest
 
     public DateTime UpdatedAt { get; set; }
 
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 }

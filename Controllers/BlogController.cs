@@ -39,11 +39,35 @@ public class BlogController:ControllerBase
         return Ok(blogs);    
     }
 
+    [HttpGet]
+    [Route("GetBlogById/{id}")]
+    public async Task<IActionResult> GetBlogById(int id)
+    {
+        var blog = await _blogService.GetBlogById(id);
+        return Ok(blog);
+    }
+
     [HttpPost]
     [Route("CreateBlog")]
     public async Task<IActionResult> CreateBlog(BlogCreateRequest model)
     {
         var blog = await _blogService.CreateBlog(model);
+        return Ok(blog);
+    }
+
+    [HttpPut]
+    [Route("UpdateBlog/{id}")]
+    public async Task<IActionResult> UpdateBlog(int id,BlogCreateRequest model)
+    {
+        var blog = await _blogService.UpdateBlog(id,model);
+        return Ok(blog);
+    }
+
+    [HttpDelete]
+    [Route("DeleteBlog/{id}")]
+    public async Task<IActionResult> DeleteBlog(int id)
+    {
+        var blog = await _blogService.DeleteBlog(id);
         return Ok(blog);
     }
 
