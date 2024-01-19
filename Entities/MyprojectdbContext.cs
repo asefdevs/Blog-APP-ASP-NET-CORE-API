@@ -37,7 +37,14 @@ public partial class MyprojectdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC0780FC72B9");
 
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.IsActive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isActive");
+            entity.Property(e => e.IsAdmin).HasDefaultValueSql("((0))");
             entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(255);
         });
 
