@@ -2,6 +2,10 @@ using newProject.Helpers;
 using newProject.Entities;
 using Microsoft.EntityFrameworkCore;
 using newProject.Services;
+using System.Text.Json.Serialization;
+using AutoMapper;
+using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +30,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MyprojectdbContext>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,57 +1,54 @@
-namespace newProject.Services;
-using newProject.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using newProject.Entities;
 using newProject.Models;
+using AutoMapper;
+using System;
 
-
-public interface IUserService
-{   
-    Task<UserResponse> AllUsers();
-    Task<UserCreateRequest> CreateUser(UserCreateRequest userCreateRequest);
-
-}
-
-public class UserService : IUserService
+namespace newProject.Services
 {
-    private readonly MyprojectdbContext _context;
-
-    public UserService(MyprojectdbContext context)
+    public interface IUserService
     {
-        _context = context;
+        Task<List<UserResponse>> AllUsers();
+        Task<UserResponse> CreateUser(UserCreateRequest model);
     }
 
-    public async Task<UserResponse> AllUsers()
+    public class UserService : IUserService
     {
-        var users = await _context.Users.ToListAsync();
-        return new UserResponse
+        private readonly MyprojectdbContext _context;
+        private readonly IMapper _mapper;
+
+        public UserService(MyprojectdbContext context, IMapper mapper)
         {
-            Users = users
-        };
-    }
+            _context = context;
+            _mapper = mapper;
+        }
 
-    public async Task<UserCreateRequest> CreateUser(UserCreateRequest userCreateRequest)
-    {
-        var user = CastUserDto(userCreateRequest);
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return userCreateRequest;
-    }
-
-    private static User CastUserDto(UserCreateRequest userCreateRequest)
-    {
-        return new User
+        public async Task<List<UserResponse>> AllUsers()
         {
-            UserName = userCreateRequest.UserName,
-            Password = userCreateRequest.Password,
-            Email = userCreateRequest.Email,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now,
-            IsAdmin = userCreateRequest.IsAdmin,
-            IsActive = userCreateRequest.IsActive           
-        };
+            var users = await _context.Users.ToListAsync();
+            return _mapper.Map<List<UserResponse>>(users);
+        }
+
+        public async Task<UserResponse> CreateUser(UserCreateRequest model)
+        {
+            var userEntity = new User
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                Password = model.Password,
+                IsAdmin = model.IsAdmin,
+                IsActive = model.IsActive,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            };
+
+            _context.Users.Add(userEntity);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserResponse>(userEntity);
+        }
     }
-        
-        
+
 }

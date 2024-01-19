@@ -1,59 +1,53 @@
-namespace newProject.Services;
-using newProject.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using newProject.Entities;
 using newProject.Models;
+using AutoMapper;
+using System;
 
 
-
-
-public interface IBlogService
-{   
-    Task<BlogResponse> AllBlogs();
-    Task<BlogCreateRequest> CreateBlog(BlogCreateRequest blogCreateRequest);
-
-}
-
-public class BlogService : IBlogService
+namespace newProject.Services
 {
-    private readonly MyprojectdbContext _context;
-
-    public BlogService(MyprojectdbContext context)
+    public interface IBlogService
     {
-        _context = context;
+        Task<List<BlogResponse>> GetAllBlogs();
+        Task<BlogResponse> CreateBlog(BlogCreateRequest model); 
     }
 
-    public async Task<BlogResponse> AllBlogs()
+    public class BlogService : IBlogService
     {
-        var blogs = await _context.Blogs.ToListAsync();
-        return new BlogResponse
+        private readonly MyprojectdbContext _context;
+        private readonly IMapper _mapper;
+
+        public BlogService(MyprojectdbContext context, IMapper mapper)
         {
-            Blogs = blogs
-        };
-    }
+            _context = context;
+            _mapper = mapper;
+        }
 
-    public async Task<BlogCreateRequest> CreateBlog(BlogCreateRequest blogCreateRequest)
-    {
-        var blog = CastBlogDto(blogCreateRequest);
-        _context.Blogs.Add(blog);
-        await _context.SaveChangesAsync();
-        return blogCreateRequest;
-    }
-
-    private static Blog CastBlogDto(BlogCreateRequest blogCreateRequest)
-    {
-        return new Blog
+        public async Task<List<BlogResponse>> GetAllBlogs()
         {
-            Title = blogCreateRequest.Title,
-            Content = blogCreateRequest.Content,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now,
-            UserId = blogCreateRequest.UserId
+            var blogs = await _context.Blogs.Include(blog => blog.User).ToListAsync();
+            return _mapper.Map<List<BlogResponse>>(blogs);
+        }
 
+        public async Task<BlogResponse> CreateBlog(BlogCreateRequest model)
+        {
+            var blogEntity = new Blog
+            {
+                Title = model.Title,
+                Content = model.Content,
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt,
+                UserId = model.UserId
+            };
+
+            _context.Blogs.Add(blogEntity);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<BlogResponse>(blogEntity);
             
-        };
+        }
     }
-        
-        
 }
