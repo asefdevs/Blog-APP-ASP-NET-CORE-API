@@ -5,6 +5,7 @@ using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
 using System;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace newProject.Services
@@ -17,7 +18,6 @@ namespace newProject.Services
         Task<BlogResponse> CreateBlog(BlogCreateRequest model); 
         Task<BlogResponse> UpdateBlog(int id,BlogCreateRequest model);
 
-        Task<bool> DeleteBlog(int id);
     }
 
     public class BlogService : IBlogService
@@ -43,8 +43,6 @@ namespace newProject.Services
             {
                 Title = model.Title,
                 Content = model.Content,
-                CreatedAt = model.CreatedAt,
-                UpdatedAt = model.UpdatedAt,
                 UserID = model.UserID
             };
 
@@ -87,14 +85,6 @@ namespace newProject.Services
         {
             var blog = await _context.Blogs.Include(blog => blog.User).FirstOrDefaultAsync(blog => blog.Id == id);
             return _mapper.Map<BlogResponse>(blog);
-        }
-
-        public async Task<bool> DeleteBlog(int id)
-        {
-            var blog = await _context.Blogs.FindAsync(id);
-            _context.Blogs.Remove(blog);
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }

@@ -40,8 +40,6 @@ namespace newProject.Services
                 Password = model.Password,
                 IsAdmin = model.IsAdmin,
                 IsActive = model.IsActive,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
             };
 
             _context.Users.Add(userEntity);

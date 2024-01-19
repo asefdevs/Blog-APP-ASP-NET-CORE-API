@@ -44,6 +44,10 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> GetBlogById(int id)
     {
         var blog = await _blogService.GetBlogById(id);
+        if (blog == null)
+        {
+            return NotFound(new { message = "Blog not found" });
+        }
         return Ok(blog);
     }
 
@@ -60,6 +64,10 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> UpdateBlog(int id,BlogCreateRequest model)
     {
         var blog = await _blogService.UpdateBlog(id,model);
+        if (blog == null)
+        {
+            return NotFound(new { message = "Blog not found" });
+        }
         return Ok(blog);
     }
 
@@ -67,8 +75,17 @@ public class BlogController:ControllerBase
     [Route("DeleteBlog/{id}")]
     public async Task<IActionResult> DeleteBlog(int id)
     {
-        var blog = await _blogService.DeleteBlog(id);
-        return Ok(blog);
+        var blog = await _context.Blogs.FindAsync(id);
+
+        if (blog == null)
+        {
+            return NotFound(new { message = "Blog not found" });
+        }
+
+        _context.Blogs.Remove(blog);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 
 }
