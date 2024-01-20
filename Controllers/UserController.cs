@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using newProject.Services;
 using newProject.Models;
 using AutoMapper;
-
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("[controller]")]

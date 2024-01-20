@@ -7,6 +7,7 @@ using newProject.Services;
 using newProject.Models;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -33,6 +34,7 @@ public class BlogController:ControllerBase
 
     [HttpGet]
     [Route("GetBlogs")]
+    [Authorize]
     public async Task<IActionResult> AllBlogs()
     {
         var blogs = await _blogService.GetAllBlogs();
