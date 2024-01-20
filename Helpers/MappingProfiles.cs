@@ -9,5 +9,6 @@ public class MappingProfiles : Profile
         CreateMap<Blog, BlogResponse>().ReverseMap();
 
         CreateMap<User, UserResponse>().ReverseMap();
+
     }
 }

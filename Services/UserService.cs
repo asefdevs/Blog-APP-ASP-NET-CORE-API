@@ -17,6 +17,8 @@ namespace newProject.Services
 
         Task<UserResponse> GetUserById(int id);
 
+        Task<LoginResponse> Login(LoginRequest model);  
+
         // Task<UserResponse> MyProfile(int id);
     }
 
@@ -24,11 +26,13 @@ namespace newProject.Services
     {
         private readonly MyprojectdbContext _context;
         private readonly IMapper _mapper;
+        private readonly JwtUtils _jwtUtils;
 
-        public UserService(MyprojectdbContext context, IMapper mapper)
+        public UserService(MyprojectdbContext context, IMapper mapper, JwtUtils jwtUtils)
         {
             _context = context;
             _mapper = mapper;
+            _jwtUtils = jwtUtils;
         }
 
         public async Task<List<UserResponse>> AllUsers()
@@ -98,6 +102,16 @@ namespace newProject.Services
             }
 
             return _mapper.Map<UserResponse>(userEntity);
+        }
+
+        public async Task<LoginResponse> Login(LoginRequest model)
+        {
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName && x.Password == model.Password);
+
+            if (userEntity == null) return null;
+            var token  = _jwtUtils.GenerateToken(userEntity);
+
+            return  new LoginResponse(userEntity, token);
         }
     }
 

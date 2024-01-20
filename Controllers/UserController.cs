@@ -58,4 +58,16 @@ public class UserController:ControllerBase
         var user = await _userService.GetUserById(id);
         return Ok(user);
     }
+
+    [HttpPost]
+    [Route("Login")]
+    public async Task<IActionResult> Login(LoginRequest model)
+    {
+        var user = await _userService.Login(model);
+        if (user == null)
+        {
+            return BadRequest(new { message = "Username or password is incorrect" });
+        }
+        return Ok(user);
+    }
 }
