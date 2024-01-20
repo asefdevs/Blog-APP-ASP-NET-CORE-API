@@ -61,7 +61,7 @@ public class BlogController:ControllerBase
 
     [HttpPut]
     [Route("UpdateBlog/{id}")]
-    public async Task<IActionResult> UpdateBlog(int id,BlogCreateRequest model)
+    public async Task<IActionResult> UpdateBlog(int id,BlogUpdateRequest model)
     {
         var blog = await _blogService.UpdateBlog(id,model);
         if (blog == null)

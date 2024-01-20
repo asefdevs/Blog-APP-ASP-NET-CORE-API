@@ -16,7 +16,7 @@ namespace newProject.Services
         Task<BlogResponse> GetBlogById(int id);
 
         Task<BlogResponse> CreateBlog(BlogCreateRequest model); 
-        Task<BlogResponse> UpdateBlog(int id,BlogCreateRequest model);
+        Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model);
 
     }
 
@@ -53,7 +53,7 @@ namespace newProject.Services
 
         }
 
-        public async Task<BlogResponse> UpdateBlog(int id,BlogCreateRequest model)
+        public async Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model)
         {
             var blogEntity = await _context.Blogs.FindAsync(id);
 
@@ -71,7 +71,6 @@ namespace newProject.Services
 
             blogEntity.Title = model.Title;
             blogEntity.Content = model.Content;
-            blogEntity.UserID = model.UserID;
             blogEntity.UpdatedAt = DateTime.Now;
 
 

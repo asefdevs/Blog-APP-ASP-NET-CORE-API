@@ -12,6 +12,12 @@ namespace newProject.Services
     {
         Task<List<UserResponse>> AllUsers();
         Task<UserResponse> CreateUser(UserCreateRequest model);
+
+        Task<UserResponse> UpdateUser(int id, UserUpdateRequest model);
+
+        Task<UserResponse> GetUserById(int id);
+
+        // Task<UserResponse> MyProfile(int id);
     }
 
     public class UserService : IUserService
@@ -33,6 +39,21 @@ namespace newProject.Services
 
         public async Task<UserResponse> CreateUser(UserCreateRequest model)
         {
+            if (await _context.Users.AnyAsync(x => x.UserName == model.UserName))
+            {
+                throw new Exception("Username " + model.UserName + " is already taken");
+            }
+
+            if (await _context.Users.AnyAsync(x => x.Email == model.Email))
+            {
+                throw new Exception("Email " + model.Email + " is already taken");
+            }
+
+            if (model.Password != model.Password2)
+            {
+                throw new Exception("Password and Confirm Password does not match");
+            }
+
             var userEntity = new User
             {
                 UserName = model.UserName,
@@ -44,6 +65,37 @@ namespace newProject.Services
 
             _context.Users.Add(userEntity);
             await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserResponse>(userEntity);
+        }
+
+        public async Task<UserResponse> UpdateUser(int id, UserUpdateRequest model)
+        {
+            var userEntity = await _context.Users.FindAsync(id);
+
+            if (userEntity == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            userEntity.UserName = model.UserName;
+            userEntity.Email = model.Email;
+            userEntity.Password = model.Password;
+            userEntity.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserResponse>(userEntity);
+        }
+
+        public async Task<UserResponse> GetUserById(int id)
+        {
+            var userEntity = await _context.Users.FindAsync(id);
+
+            if (userEntity == null)
+            {
+                throw new Exception("User not found");
+            }
 
             return _mapper.Map<UserResponse>(userEntity);
         }

@@ -27,7 +27,7 @@ public class UserController:ControllerBase
     }
 
     [HttpGet]
-    [Route("GetUsers")]
+    [Route("GetAllUsers")]
     public async Task<IActionResult> AllUsers()
     {
         var users = await _userService.AllUsers();
@@ -43,4 +43,19 @@ public class UserController:ControllerBase
 
     }
 
+    [HttpPut]
+    [Route("UpdateUser/{id}")]
+    public async Task<IActionResult> UpdateUser(int id, UserUpdateRequest model)
+    {
+        var user = await _userService.UpdateUser(id, model);
+        return Ok(user);
+    }
+
+    [HttpGet]
+    [Route("GetUserById/{id}")]
+    public async Task<IActionResult> GetUserById(int id)
+    {
+        var user = await _userService.GetUserById(id);
+        return Ok(user);
+    }
 }
