@@ -8,6 +8,7 @@ using newProject.Models;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -58,6 +59,11 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> CreateBlog(BlogCreateRequest model)
     {
         var blog = await _blogService.CreateBlog(model);
+
+        if (blog == null)
+        {
+            return BadRequest(new { message = "Blog not found" });
+        }
         return Ok(blog);
     }
 
@@ -90,4 +96,23 @@ public class BlogController:ControllerBase
         return NoContent();
     }
 
+    [HttpDelete]
+    [Route("DeleteAllBlogs")]
+    public async Task<IActionResult> DeleteAllBlogs()
+    {
+        
+        {
+            var blogs = await _context.Blogs.ToListAsync();
+
+            if (blogs == null || !blogs.Any())
+            {
+                return NotFound("No blogs found to delete.");
+            }
+
+            _context.Blogs.RemoveRange(blogs);
+            await _context.SaveChangesAsync();
+
+            return Ok("All blogs deleted successfully.");
+        }
+    }
 }

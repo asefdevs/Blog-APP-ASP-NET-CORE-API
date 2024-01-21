@@ -19,11 +19,5 @@ public class BlogResponse
     public DateTime UpdatedAt { get; set; }
 
     public UserResponse? User { get; set; }
-
-    public BlogResponse()
-    {
-        User = new UserResponse();
-    }
-    
         
 }

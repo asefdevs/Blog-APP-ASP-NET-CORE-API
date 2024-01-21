@@ -39,6 +39,13 @@ namespace newProject.Services
 
         public async Task<BlogResponse> CreateBlog(BlogCreateRequest model)
         {
+            var userExists = await _context.Users.AnyAsync(u => u.Id == model.UserID);
+
+            if (!userExists)
+            {
+                return null;
+            }
+
             var blogEntity = new Blog
             {
                 Title = model.Title,
@@ -48,6 +55,7 @@ namespace newProject.Services
 
             _context.Blogs.Add(blogEntity);
             await _context.SaveChangesAsync();
+            
 
             return _mapper.Map<BlogResponse>(blogEntity);
 
@@ -76,6 +84,7 @@ namespace newProject.Services
 
             _context.Blogs.Update(blogEntity);
             await _context.SaveChangesAsync();
+
 
             return _mapper.Map<BlogResponse>(blogEntity);
         }
