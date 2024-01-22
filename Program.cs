@@ -52,6 +52,7 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddDbContext<MyprojectdbContext>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IHelperService, HelperService>();
 builder.Services.AddScoped<JwtUtils>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
