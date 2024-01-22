@@ -1,14 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-
 namespace newProject.Controllers;
 using newProject.Entities;
-using System.Collections.Generic;
 using newProject.Services;
 using newProject.Models;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+
 
 
 
@@ -21,14 +24,16 @@ public class BlogController:ControllerBase
     public readonly MyprojectdbContext _context;
     private readonly IBlogService _blogService;
 
+
     private readonly IMapper _mapper;
 
     
-    public BlogController(MyprojectdbContext context, IBlogService blogService,IMapper mapper)
+    public BlogController(MyprojectdbContext context, IBlogService blogService, IMapper mapper)
     {
         _context = context;
         _blogService = blogService;
         _mapper =  mapper;
+
 
     }
 
@@ -58,11 +63,13 @@ public class BlogController:ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [Route("CreateBlog")]
     public async Task<IActionResult> CreateBlog(BlogCreateRequest model)
     {
         try 
         {
+
             var blog = await _blogService.CreateBlog(model);
             return Ok(blog);
         }

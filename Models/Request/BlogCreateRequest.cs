@@ -10,5 +10,4 @@ public class BlogCreateRequest
 
     public string Content { get; set; } 
 
-    public int UserID { get; set; }
 }

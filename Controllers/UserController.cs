@@ -5,6 +5,9 @@ using newProject.Entities;
 using newProject.Services;
 using newProject.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 [ApiController]
 [Route("[controller]")]
@@ -50,5 +53,22 @@ public class UserController:ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet]
+    [Route("MyProfile")]
+    [Authorize]
+    public async Task<IActionResult> MyProfile()
+    {
+        try
+        {
+            var user = await _userService.MyProfile(User);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
 
 }

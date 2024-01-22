@@ -2,6 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace newProject.Services
 {
@@ -16,7 +21,7 @@ namespace newProject.Services
 
         Task<LoginResponse> Login(LoginRequest model);  
 
-        // Task<UserResponse> MyProfile(int id);
+        Task<UserResponse> MyProfile(ClaimsPrincipal user);
     }
 
     public class UserService : IUserService
@@ -130,6 +135,54 @@ namespace newProject.Services
 
             return  new LoginResponse(userEntity, token);
         }
-    }
 
+        public async Task<UserResponse> MyProfile(ClaimsPrincipal user)
+        {
+            var userIdClaim = user.FindFirst("UserId");
+
+            if (userIdClaim != null)
+            {
+                var userIdstring = userIdClaim.Value;
+                var userId = int.Parse(userIdstring);
+
+                var userEntity = await _context.Users.FindAsync(userId);
+
+                return _mapper.Map<UserResponse>(userEntity);
+            }
+
+            return null;
+        }
+
+    }
 }
+    // [HttpGet]
+    // [Route("MyProfile")]
+    // [Authorize]
+    // public IActionResult MyProfile()
+    // {
+    //     try
+    //     {
+    //         var userIdClaim =  User.FindFirst("UserId");
+
+    //         if (userIdClaim != null)
+    //         {
+    //             var userId = userIdClaim.Value;
+
+    //             // Now you can use the userId as needed in your action
+    //             // For example, fetch user profile data based on the user ID
+
+    //             // TODO: Fetch user profile data using the userId
+
+    //             // For demonstration, you can return the user ID as part of the response
+    //             return Ok(new { UserId = userId });
+    //         }
+
+    //         // If the user ID claim is not found, return an error response
+    //         return BadRequest("User ID not found in claims.");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Log the exception or handle it as needed
+    //         return StatusCode(500, "Internal Server Error");
+    //     }
+    // }

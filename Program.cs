@@ -72,7 +72,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.SaveToken = true;
         options.TokenValidationParameters = new()
         {
-            ValidateIssuer = false,
+            ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
@@ -92,13 +92,21 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
 }
+app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseCors(); //
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
-
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
+
+
+

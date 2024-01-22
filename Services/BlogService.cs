@@ -35,18 +35,10 @@ namespace newProject.Services
 
         public async Task<BlogResponse> CreateBlog(BlogCreateRequest model)
         {
-            var userExists = await _context.Users.AnyAsync(u => u.Id == model.UserID);
-
-            if (!userExists)
-            {
-                throw new Exception("User not found");
-            }
-
             var blogEntity = new Blog
             {
                 Title = model.Title,
                 Content = model.Content,
-                UserID = model.UserID
             };
 
             _context.Blogs.Add(blogEntity);
@@ -74,7 +66,6 @@ namespace newProject.Services
                 blogEntity.Content = model.Content;
             }
             blogEntity.UpdatedAt = DateTime.Now;
-
 
             _context.Blogs.Update(blogEntity);
             await _context.SaveChangesAsync();
