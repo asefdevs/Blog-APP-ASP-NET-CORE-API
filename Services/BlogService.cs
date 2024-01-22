@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
-using System;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace newProject.Services

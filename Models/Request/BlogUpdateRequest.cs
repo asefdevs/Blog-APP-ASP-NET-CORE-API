@@ -1,8 +1,4 @@
 namespace newProject.Models;
-using newProject.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 

@@ -2,11 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace newProject.Controllers;
 using newProject.Entities;
-using System.Collections.Generic;
 using newProject.Services;
 using newProject.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("[controller]")]
@@ -26,23 +24,6 @@ public class UserController:ControllerBase
         _mapper =  mapper;
     }
 
-    [HttpGet]
-    [Route("GetAllUsers")]
-    public async Task<IActionResult> AllUsers()
-    {
-        var users = await _userService.AllUsers();
-        return Ok(users);
-    }
-
-    [HttpPost]
-    [Route("CreateUser")]
-    public async Task<IActionResult> CreateUser(UserCreateRequest model)
-    {
-        var user = await _userService.CreateUser(model);
-        return CreatedAtAction(nameof(CreateUser), new { id = user.Id }, user);
-
-    }
-
     [HttpPut]
     [Route("UpdateUser/{id}")]
     public async Task<IActionResult> UpdateUser(int id, UserUpdateRequest model)
@@ -59,15 +40,4 @@ public class UserController:ControllerBase
         return Ok(user);
     }
 
-    [HttpPost]
-    [Route("Login")]
-    public async Task<IActionResult> Login(LoginRequest model)
-    {
-        var user = await _userService.Login(model);
-        if (user == null)
-        {
-            return BadRequest(new { message = "Username or password is incorrect" });
-        }
-        return Ok(user);
-    }
 }
