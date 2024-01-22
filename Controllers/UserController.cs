@@ -13,31 +13,42 @@ public class UserController:ControllerBase
     public readonly MyprojectdbContext _context;
     private readonly IUserService _userService;
 
-    private readonly IMapper _mapper;
 
 
-
-    public UserController(MyprojectdbContext context, IUserService userService, IMapper mapper)
+    public UserController(MyprojectdbContext context, IUserService userService)
     {
         _context = context;
         _userService = userService;
-        _mapper =  mapper;
     }
 
     [HttpPut]
     [Route("UpdateUser/{id}")]
     public async Task<IActionResult> UpdateUser(int id, UserUpdateRequest model)
     {
-        var user = await _userService.UpdateUser(id, model);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.UpdateUser(id, model);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet]
     [Route("GetUserById/{id}")]
     public async Task<IActionResult> GetUserById(int id)
     {
-        var user = await _userService.GetUserById(id);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.GetUserById(id);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
 }

@@ -39,8 +39,15 @@ public class AuthenticationController:ControllerBase
     [Route("Register")]
     public async Task<IActionResult> Register(UserCreateRequest model)
     {
-        var user = await _userservice.CreateUser(model);
-        return CreatedAtAction(nameof(Register), new { id = user.Id }, user);
+        try 
+        {
+            var user = await _userservice.CreateUser(model);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     
 

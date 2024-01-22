@@ -5,13 +5,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using System.Text.Json;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 {
     var services = builder.Services;
     services.AddCors();
-    services.AddControllers();
+    services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 
     // // configure strongly typed settings object

@@ -1,13 +1,11 @@
 namespace newProject.Models;
-using newProject.Entities;
+using System.ComponentModel.DataAnnotations;
 
 public class UserUpdateRequest
 {
-    public string UserName { get; set; } = null!;
-    public string Password { get; set; } = null!;
-    public string Email { get; set; } = null!;
+    public string? UserName { get; set; } 
 
-
-
+    [EmailAddress(ErrorMessage = "Invalid Email Address")]
+    public string? Email { get; set; } 
 
 }

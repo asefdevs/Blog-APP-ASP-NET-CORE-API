@@ -46,37 +46,45 @@ public class BlogController:ControllerBase
     [Route("GetBlogById/{id}")]
     public async Task<IActionResult> GetBlogById(int id)
     {
-        var blog = await _blogService.GetBlogById(id);
-        if (blog == null)
+        try
         {
-            return NotFound(new { message = "Blog not found" });
+            var blog = await _blogService.GetBlogById(id);
+            return Ok(blog);
         }
-        return Ok(blog);
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPost]
     [Route("CreateBlog")]
     public async Task<IActionResult> CreateBlog(BlogCreateRequest model)
     {
-        var blog = await _blogService.CreateBlog(model);
-
-        if (blog == null)
+        try 
         {
-            return BadRequest(new { message = "Blog not found" });
+            var blog = await _blogService.CreateBlog(model);
+            return Ok(blog);
         }
-        return Ok(blog);
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpPut]
     [Route("UpdateBlog/{id}")]
     public async Task<IActionResult> UpdateBlog(int id,BlogUpdateRequest model)
     {
-        var blog = await _blogService.UpdateBlog(id,model);
-        if (blog == null)
+        try 
         {
-            return NotFound(new { message = "Blog not found" });
+            var blog = await _blogService.UpdateBlog(id,model);
+            return Ok(blog);
         }
-        return Ok(blog);
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpDelete]

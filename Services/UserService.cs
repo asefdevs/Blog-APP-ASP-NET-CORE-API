@@ -79,9 +79,29 @@ namespace newProject.Services
                 throw new Exception("User not found");
             }
 
-            userEntity.UserName = model.UserName;
-            userEntity.Email = model.Email;
-            userEntity.Password = model.Password;
+            if (!string.IsNullOrEmpty(model.Email) && 
+                await _context.Users.AnyAsync(x => x.Id != id && x.Email == model.Email))
+            {
+                throw new Exception("Email " + model.Email + " is already taken");
+            }
+
+            if (!string.IsNullOrEmpty(model.UserName) && 
+                await _context.Users.AnyAsync(x => x.Id != id && x.UserName == model.UserName))
+            {
+                throw new Exception("Username " + model.UserName + " is already taken");
+            }
+
+            if (!string.IsNullOrEmpty(model.UserName))
+            {
+                userEntity.UserName = model.UserName;
+            }
+
+            if (!string.IsNullOrEmpty(model.Email))
+            {
+                userEntity.Email = model.Email;
+            }
+
+
             userEntity.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

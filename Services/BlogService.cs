@@ -39,7 +39,7 @@ namespace newProject.Services
 
             if (!userExists)
             {
-                return null;
+                throw new Exception("User not found");
             }
 
             var blogEntity = new Blog
@@ -63,18 +63,16 @@ namespace newProject.Services
 
             if (blogEntity == null)
             {
-                return null;
+                throw new Exception("Blog not found");
             }
-
-            var user_id = blogEntity.UserID;
-
-            if (user_id == null)
+            if (!string.IsNullOrEmpty(model.Title))
             {
-                return null;
+                blogEntity.Title = model.Title;
             }
-
-            blogEntity.Title = model.Title;
-            blogEntity.Content = model.Content;
+            if (!string.IsNullOrEmpty(model.Content))
+            {
+                blogEntity.Content = model.Content;
+            }
             blogEntity.UpdatedAt = DateTime.Now;
 
 
@@ -88,6 +86,10 @@ namespace newProject.Services
         public async Task<BlogResponse> GetBlogById(int id)
         {
             var blog = await _context.Blogs.Include(blog => blog.User).FirstOrDefaultAsync(blog => blog.Id == id);
+            if (blog == null)
+            {
+                throw new Exception("Blog not found");
+            }
             return _mapper.Map<BlogResponse>(blog);
         }
     }
