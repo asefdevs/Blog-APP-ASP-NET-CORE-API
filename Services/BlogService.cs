@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 
 namespace newProject.Services
@@ -11,7 +13,7 @@ namespace newProject.Services
         Task<List<BlogResponse>> GetAllBlogs();
         Task<BlogResponse> GetBlogById(int id);
 
-        Task<BlogResponse> CreateBlog(BlogCreateRequest model); 
+        Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId); 
         Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model);
 
     }
@@ -33,21 +35,23 @@ namespace newProject.Services
             return _mapper.Map<List<BlogResponse>>(blogs);
         }
 
-        public async Task<BlogResponse> CreateBlog(BlogCreateRequest model)
+        public async Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId)
         {
             var blogEntity = new Blog
             {
                 Title = model.Title,
                 Content = model.Content,
+                UserID = userId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             _context.Blogs.Add(blogEntity);
             await _context.SaveChangesAsync();
-            
-
             return _mapper.Map<BlogResponse>(blogEntity);
 
         }
+       
 
         public async Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model)
         {

@@ -68,9 +68,10 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> CreateBlog(BlogCreateRequest model)
     {
         try 
-        {
+        {   ClaimsPrincipal user =  HttpContext.User;
+            var userId = ClaimsHelper.RequestedUser(user);
 
-            var blog = await _blogService.CreateBlog(model);
+            var blog = await _blogService.CreateBlog(model,userId.Value);
             return Ok(blog);
         }
         catch (Exception ex)
