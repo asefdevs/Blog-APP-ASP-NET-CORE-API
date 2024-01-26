@@ -10,8 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-
+using newProject.Exceptions;
 
 
 
@@ -58,7 +57,7 @@ public class BlogController:ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return NotFound(new { message = ex.Message });
         }
     }
 
@@ -90,9 +89,17 @@ public class BlogController:ControllerBase
             var blog = await _blogService.UpdateBlog(id, user, model);
             return Ok(blog);
         }
+       catch (ForbbidenAccessException ex)
+        {
+            return StatusCode(403, new {message = ex.Message});
+        }
+        catch (NotFoundException ex)
+        {
+            return StatusCode(404, new {message = ex.Message});
+        }
         catch (Exception ex)
         {
-            return NotFound(new { message = ex.Message });
+            return BadRequest(new { message = ex.Message });
         }
     }
 

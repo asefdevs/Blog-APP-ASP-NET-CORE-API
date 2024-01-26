@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using newProject.Exceptions;
 
 [ApiController]
 [Route("[controller]")]
@@ -34,10 +35,19 @@ public class UserController:ControllerBase
             var updatedUser = await _userService.UpdateUser(id, user, model);
             return Ok(updatedUser);
         }
+        catch (ForbbidenAccessException ex)
+        {
+            return StatusCode(403, new { message = ex.Message });
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
         catch (Exception ex)
         {
             return BadRequest(new { message = ex.Message });
         }
+     
     }
 
     [HttpGet]
@@ -48,6 +58,10 @@ public class UserController:ControllerBase
         {
             var user = await _userService.GetUserById(id);
             return Ok(user);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
         catch (Exception ex)
         {
@@ -66,9 +80,14 @@ public class UserController:ControllerBase
             var userProfile = await _userService.MyProfile(User);
             return Ok(userProfile);
         }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
         catch (Exception ex)
         {
             return BadRequest(new { message = ex.Message });
         }
+        
     }
 }

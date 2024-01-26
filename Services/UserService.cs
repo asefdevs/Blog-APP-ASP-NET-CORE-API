@@ -2,9 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
-using System.Threading.Tasks;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using newProject.Exceptions;
 
 
 
@@ -81,12 +80,12 @@ namespace newProject.Services
                 int? userId = ClaimsHelper.RequestedUser(user);
                 if (userId != id)
                 {
-                    throw new Exception("User not found or not authorized");
+                    throw new ForbbidenAccessException("You are not allowed to update this user");
                 }
                 var userEntity = await _context.Users.FindAsync(id);
                 if (userEntity == null)
                 {
-                    throw new Exception("User not found");
+                    throw new NotFoundException("User not found");
                 }
                 if (!string.IsNullOrEmpty(model.Email) && 
                     await _context.Users.AnyAsync(x => x.Id != id && x.Email == model.Email))
@@ -126,7 +125,7 @@ namespace newProject.Services
 
             if (userEntity == null)
             {
-                throw new Exception("User not found");
+                throw new NotFoundException("User not found");
             }
 
             return _mapper.Map<UserResponse>(userEntity);
@@ -144,24 +143,16 @@ namespace newProject.Services
 
         public async Task<UserResponse> MyProfile(ClaimsPrincipal user)
         {
-            try
-            {
+           
                 int? userId = ClaimsHelper.RequestedUser(user);
-                if (userId == null)
-                {
-                    throw new Exception("User not found");
-                }
                 var userEntity = await _context.Users.FindAsync(userId);
                 if (userEntity == null)
                 {
-                    throw new Exception("User not found");
+                    throw new NotFoundException("User not found");
                 }
                 return _mapper.Map<UserResponse>(userEntity);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error occurred while fetching user profile.", ex);
-            }
+            
+      
         }
     }
 }

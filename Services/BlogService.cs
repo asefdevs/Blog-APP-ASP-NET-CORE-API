@@ -4,6 +4,7 @@ using newProject.Models;
 using AutoMapper;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using newProject.Exceptions;
 
 
 namespace newProject.Services
@@ -57,13 +58,13 @@ namespace newProject.Services
         {   var userId = ClaimsHelper.RequestedUser(user);
             if (userId != id)
             {
-                throw new Exception("You are author of this blog");
+                throw new ForbbidenAccessException("You are author of this blog");
             }
             var blogEntity = await _context.Blogs.FindAsync(id);
 
             if (blogEntity == null)
             {
-                throw new Exception("Blog not found");
+                throw new NotFoundException("Blog not found");
             }
             if (!string.IsNullOrEmpty(model.Title))
             {
@@ -87,7 +88,7 @@ namespace newProject.Services
             var blog = await _context.Blogs.Include(blog => blog.User).FirstOrDefaultAsync(blog => blog.Id == id);
             if (blog == null)
             {
-                throw new Exception("Blog not found");
+                throw new NotFoundException("Blog not found");
             }
             return _mapper.Map<BlogResponse>(blog);
         }
