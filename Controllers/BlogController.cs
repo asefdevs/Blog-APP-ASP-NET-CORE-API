@@ -108,6 +108,13 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> DeleteBlog(int id)
     {
         var blog = await _context.Blogs.FindAsync(id);
+        var author = blog.UserID;
+        ClaimsPrincipal user =  HttpContext.User;
+        var userId = ClaimsHelper.RequestedUser(user);
+        if (userId != author)
+        {
+            return StatusCode(403, new {message = "You are not author of this blog"});
+        }
 
         if (blog == null)
         {
