@@ -61,14 +61,13 @@ public class UserController:ControllerBase
     {
         try
         {
-            var user = await _userService.MyProfile(User);
-            return Ok(user);
+            ClaimsPrincipal user =  HttpContext.User;
+            var userProfile = await _userService.MyProfile(User);
+            return Ok(userProfile);
         }
         catch (Exception ex)
         {
             return BadRequest(new { message = ex.Message });
         }
     }
-
-
 }
