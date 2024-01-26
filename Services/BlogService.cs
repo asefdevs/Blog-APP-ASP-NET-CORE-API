@@ -14,7 +14,7 @@ namespace newProject.Services
         Task<BlogResponse> GetBlogById(int id);
 
         Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId); 
-        Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model);
+        Task<BlogResponse> UpdateBlog(int id, ClaimsPrincipal user, BlogUpdateRequest model);
 
     }
 
@@ -53,8 +53,12 @@ namespace newProject.Services
         }
        
 
-        public async Task<BlogResponse> UpdateBlog(int id,BlogUpdateRequest model)
-        {
+        public async Task<BlogResponse> UpdateBlog(int id, ClaimsPrincipal user, BlogUpdateRequest model)
+        {   var userId = ClaimsHelper.RequestedUser(user);
+            if (userId != id)
+            {
+                throw new Exception("You are author of this blog");
+            }
             var blogEntity = await _context.Blogs.FindAsync(id);
 
             if (blogEntity == null)

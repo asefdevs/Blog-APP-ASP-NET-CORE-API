@@ -15,7 +15,7 @@ namespace newProject.Services
         Task<List<UserResponse>> AllUsers();
         Task<UserResponse> CreateUser(UserCreateRequest model);
 
-        Task<UserResponse> UpdateUser(int id, UserUpdateRequest model);
+        Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model);
 
         Task<UserResponse> GetUserById(int id);
 
@@ -75,43 +75,49 @@ namespace newProject.Services
             return _mapper.Map<UserResponse>(userEntity);
         }
 
-        public async Task<UserResponse> UpdateUser(int id, UserUpdateRequest model)
+        public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model)
         {
-            var userEntity = await _context.Users.FindAsync(id);
+          
+                int? userId = ClaimsHelper.RequestedUser(user);
+                if (userId != id)
+                {
+                    throw new Exception("User not found or not authorized");
+                }
+                var userEntity = await _context.Users.FindAsync(id);
+                if (userEntity == null)
+                {
+                    throw new Exception("User not found");
+                }
+                if (!string.IsNullOrEmpty(model.Email) && 
+                    await _context.Users.AnyAsync(x => x.Id != id && x.Email == model.Email))
+                {
+                    throw new Exception("Email " + model.Email + " is already taken");
+                }
 
-            if (userEntity == null)
-            {
-                throw new Exception("User not found");
-            }
+                if (!string.IsNullOrEmpty(model.UserName) && 
+                    await _context.Users.AnyAsync(x => x.Id != id && x.UserName == model.UserName))
+                {
+                    throw new Exception("Username " + model.UserName + " is already taken");
+                }
 
-            if (!string.IsNullOrEmpty(model.Email) && 
-                await _context.Users.AnyAsync(x => x.Id != id && x.Email == model.Email))
-            {
-                throw new Exception("Email " + model.Email + " is already taken");
-            }
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    userEntity.UserName = model.UserName;
+                }
 
-            if (!string.IsNullOrEmpty(model.UserName) && 
-                await _context.Users.AnyAsync(x => x.Id != id && x.UserName == model.UserName))
-            {
-                throw new Exception("Username " + model.UserName + " is already taken");
-            }
-
-            if (!string.IsNullOrEmpty(model.UserName))
-            {
-                userEntity.UserName = model.UserName;
-            }
-
-            if (!string.IsNullOrEmpty(model.Email))
-            {
-                userEntity.Email = model.Email;
-            }
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    userEntity.Email = model.Email;
+                }
 
 
-            userEntity.UpdatedAt = DateTime.Now;
+                userEntity.UpdatedAt = DateTime.Now;
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserResponse>(userEntity);
+                return _mapper.Map<UserResponse>(userEntity);
+            
+        
         }
 
         public async Task<UserResponse> GetUserById(int id)

@@ -30,8 +30,9 @@ public class UserController:ControllerBase
     {
         try
         {
-            var user = await _userService.UpdateUser(id, model);
-            return Ok(user);
+            ClaimsPrincipal user =  HttpContext.User;
+            var updatedUser = await _userService.UpdateUser(id, user, model);
+            return Ok(updatedUser);
         }
         catch (Exception ex)
         {

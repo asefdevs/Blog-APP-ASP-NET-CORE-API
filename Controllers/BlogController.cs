@@ -81,12 +81,13 @@ public class BlogController:ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     [Route("UpdateBlog/{id}")]
     public async Task<IActionResult> UpdateBlog(int id,BlogUpdateRequest model)
     {
         try 
-        {
-            var blog = await _blogService.UpdateBlog(id,model);
+        {   ClaimsPrincipal user =  HttpContext.User;
+            var blog = await _blogService.UpdateBlog(id, user, model);
             return Ok(blog);
         }
         catch (Exception ex)
