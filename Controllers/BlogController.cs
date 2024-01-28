@@ -108,7 +108,7 @@ public class BlogController:ControllerBase
     public async Task<IActionResult> DeleteBlog(int id)
     {
         var blog = await _context.Blogs.FindAsync(id);
-        var author = blog.UserID;
+        var author = blog.UserId;
         ClaimsPrincipal user =  HttpContext.User;
         var userId = ClaimsHelper.RequestedUser(user);
         if (userId != author)

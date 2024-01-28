@@ -18,3 +18,4 @@ dotnet ef dbcontext scaffold "connectionstring" Microsoft.EntityFrameworkCore.Sq
 dotnet ef dbcontext scaffold --context-dir Models
 10, Create the controller also complete the steps in the middleware
 
+dotnet ef dbcontext scaffold "Name=ConnectionStrings:conn" Microsoft.EntityFrameworkCore.SqlServer --output-dir Entities --force

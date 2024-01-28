@@ -22,4 +22,6 @@ public partial class User
     public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 }

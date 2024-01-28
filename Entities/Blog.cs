@@ -15,7 +15,11 @@ public partial class Blog
 
     public DateTime UpdatedAt { get; set; }
 
-    public int UserID { get; set; }
+    public int UserId { get; set; }
+
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 
     public virtual User User { get; set; } = null!;
 }

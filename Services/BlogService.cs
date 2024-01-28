@@ -42,7 +42,7 @@ namespace newProject.Services
             {
                 Title = model.Title,
                 Content = model.Content,
-                UserID = userId,
+                UserId = userId,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
