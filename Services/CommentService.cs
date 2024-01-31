@@ -32,7 +32,7 @@ namespace newProject.Services
 
         public async Task<List<CommentResponse>> AllComments(int blogId)
         {
-            var comments = await _context.Comments.Where(x => x.BlogId == blogId).ToListAsync();
+            var comments = await _context.Comments.Include(comment => comment.User).Where(comment => comment.BlogId == blogId).ToListAsync();
             return _mapper.Map<List<CommentResponse>>(comments);
         }
 

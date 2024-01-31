@@ -10,5 +10,7 @@ public class MappingProfiles : Profile
 
         CreateMap<User, UserResponse>().ReverseMap();
 
+        CreateMap<Comment, CommentResponse>().ReverseMap();
+
     }
 }

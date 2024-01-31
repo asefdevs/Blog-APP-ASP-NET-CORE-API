@@ -51,6 +51,31 @@ public class CommentController:ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    [HttpPost]
+    [Route("CreateComment")]
+    [Authorize]
+    public async Task<IActionResult> CreateComment(CommentCreateRequest model)
+    {
+        try
+        {
+            ClaimsPrincipal user = HttpContext.User;
+            var userId = ClaimsHelper.RequestedUser(user);
+
+            var blog = await _context.Blogs.FindAsync(model.BlogId);
+            if (blog == null)
+            {
+                return NotFound(new { message = "Blog not found." });
+            }
+
+            var comment = await _commentService.CreateComment(model, userId.Value);
+            return Ok(comment);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
 
 
