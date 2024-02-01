@@ -26,6 +26,7 @@ public class UserController:ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     [Route("UpdateUser/{id}")]
     public async Task<IActionResult> UpdateUser(int id, UserUpdateRequest model)
     {

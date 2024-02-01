@@ -76,6 +76,29 @@ public class CommentController:ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+    [HttpDelete]
+    [Authorize]
+    [Route("DeleteComment/{id}")]
+    public async Task<IActionResult> DeleteComment(int id)
+    {
+        var comment = await _context.Comments.FindAsync(id);
+        var author = comment.UserId;
+        ClaimsPrincipal user = HttpContext.User;
+        var userId = ClaimsHelper.RequestedUser(user);
+        if (userId != author)
+        {
+            return StatusCode(403, new { message = "You are not author of this comment" });
+        }
+
+        if (comment == null)
+        {
+            return NotFound(new { message = "Comment not found" });
+        }
+
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Comment deleted successfully" });
+    }
 }
 
 

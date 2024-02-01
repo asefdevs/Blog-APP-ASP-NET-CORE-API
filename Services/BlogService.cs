@@ -56,11 +56,11 @@ namespace newProject.Services
 
         public async Task<BlogResponse> UpdateBlog(int id, ClaimsPrincipal user, BlogUpdateRequest model)
         {   var userId = ClaimsHelper.RequestedUser(user);
-            if (userId != id)
-            {
-                throw new ForbbidenAccessException("You are author of this blog");
-            }
             var blogEntity = await _context.Blogs.FindAsync(id);
+            if (userId != blogEntity.UserId)
+            {
+                throw new ForbbidenAccessException("You are not author of this blog");
+            }
 
             if (blogEntity == null)
             {

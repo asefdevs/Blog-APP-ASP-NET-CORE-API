@@ -39,7 +39,6 @@ public class BlogController:ControllerBase
 
     [HttpGet]
     [Route("GetBlogs")]
-    [Authorize]
     public async Task<IActionResult> AllBlogs()
     {
         var blogs = await _blogService.GetAllBlogs();
