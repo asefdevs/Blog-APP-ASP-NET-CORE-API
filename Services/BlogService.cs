@@ -11,7 +11,7 @@ namespace newProject.Services
 {
     public interface IBlogService
     {
-        Task<List<BlogResponse>> GetAllBlogs();
+        Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null);
         Task<BlogResponse> GetBlogById(int id);
 
         Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId); 
@@ -30,10 +30,18 @@ namespace newProject.Services
             _mapper = mapper;
         }
 
-        public async Task<List<BlogResponse>> GetAllBlogs()
+        public async Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null)
         {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var blogs = await _context.Blogs.Include(blog => blog.User).Where(blog => blog.Title.Contains(searchTerm)).ToListAsync();
+                return _mapper.Map<List<BlogResponse>>(blogs);
+            }
+            else
+            {
             var blogs = await _context.Blogs.Include(blog => blog.User).ToListAsync();
             return _mapper.Map<List<BlogResponse>>(blogs);
+            }
         }
 
         public async Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId)

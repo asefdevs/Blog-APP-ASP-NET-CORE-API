@@ -39,10 +39,17 @@ public class BlogController:ControllerBase
 
     [HttpGet]
     [Route("GetBlogs")]
-    public async Task<IActionResult> AllBlogs()
+    public async Task<IActionResult> AllBlogs(string searchTerm = null)
     {
-        var blogs = await _blogService.GetAllBlogs();
-        return Ok(blogs);    
+        try
+        {
+            var blogs = await _blogService.GetAllBlogs(searchTerm);
+            return Ok(blogs);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpGet]
