@@ -1,4 +1,7 @@
-﻿namespace newProject.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace newProject.Entities;
 
 public partial class User
 {
