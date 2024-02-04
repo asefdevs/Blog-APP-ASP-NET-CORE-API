@@ -9,7 +9,7 @@ public partial class Category
 
     public string? Title { get; set; }
 
-    public DateTime CretaedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 

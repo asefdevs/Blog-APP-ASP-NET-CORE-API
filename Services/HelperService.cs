@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
+using newProject.Helpers.Dto;
 using AutoMapper;
 
 namespace newProject.Services
@@ -8,6 +9,7 @@ namespace newProject.Services
     public interface IHelperService
     {
         Task<List<UserResponse>> AllUsers();
+        Task<List<CategoryDto>> AllCategories();
     }
 
 
@@ -28,5 +30,13 @@ namespace newProject.Services
             var users = await _context.Users.ToListAsync();
             return _mapper.Map<List<UserResponse>>(users);
         }
+
+        public async Task<List<CategoryDto>> AllCategories()
+        {
+            var categories = await _context.Categories.ToListAsync();
+            return _mapper.Map<List<CategoryDto>>(categories);
+        }
+
+
     }
 }

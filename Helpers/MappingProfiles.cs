@@ -1,5 +1,6 @@
 using AutoMapper;
 using newProject.Entities;
+using newProject.Helpers.Dto;
 using newProject.Models;
 
 public class MappingProfiles : Profile
@@ -11,6 +12,8 @@ public class MappingProfiles : Profile
         CreateMap<User, UserResponse>().ReverseMap();
 
         CreateMap<Comment, CommentResponse>().ReverseMap();
+
+        CreateMap<Category, CategoryDto>().ReverseMap();
 
     }
 }
