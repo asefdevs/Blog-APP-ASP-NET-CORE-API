@@ -11,7 +11,7 @@ namespace newProject.Services
 {
     public interface IBlogService
     {
-        Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null);
+        Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null, int? categoryId = null);
         Task<BlogResponse> GetBlogById(int id);
 
         Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId); 
@@ -30,27 +30,51 @@ namespace newProject.Services
             _mapper = mapper;
         }
 
-        public async Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null)
-        {
+        public async Task<List<BlogResponse>> GetAllBlogs(string searchTerm = null, int? categoryId = null)
+        {       
+            IQueryable<Blog> query = _context.Blogs
+                .Include(blog => blog.User)
+                .Include(blog => blog.Category);
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                var blogs = await _context.Blogs.Include(blog => blog.User).Where(blog => blog.Title.Contains(searchTerm)).ToListAsync();
-                return _mapper.Map<List<BlogResponse>>(blogs);
+                query = query.Where(blog => blog.Title.Contains(searchTerm));
             }
-            else
+            if (categoryId != null)
             {
-            var blogs = await _context.Blogs.Include(blog => blog.User).ToListAsync();
-            return _mapper.Map<List<BlogResponse>>(blogs);
+                var category = await _context.Categories.FindAsync(categoryId);
+                if (category == null)
+                {
+                    throw new NotFoundException("Category not found");
+                }
+                query = query.Where(blog => blog.CategoryId == categoryId);
             }
+            if (categoryId != null && !string.IsNullOrEmpty(searchTerm))
+            {
+                var category = await _context.Categories.FindAsync(categoryId);
+                if (category == null)
+                {
+                    throw new NotFoundException("Category not found");
+                }
+                query = query.Where(blog => blog.CategoryId == categoryId && blog.Title.Contains(searchTerm));
+            }
+            var blogs = await query.ToListAsync();
+            return _mapper.Map<List<BlogResponse>>(blogs);
         }
 
         public async Task<BlogResponse> CreateBlog(BlogCreateRequest model, int userId)
         {
+            var category = await _context.Categories.FindAsync(model.CategoryId);
+            if (category == null)
+            {
+                throw new NotFoundException("Category not found");
+            }
+          
             var blogEntity = new Blog
             {
                 Title = model.Title,
                 Content = model.Content,
                 UserId = userId,
+                CategoryId = model.CategoryId,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
@@ -93,7 +117,10 @@ namespace newProject.Services
 
         public async Task<BlogResponse> GetBlogById(int id)
         {
-            var blog = await _context.Blogs.Include(blog => blog.User).FirstOrDefaultAsync(blog => blog.Id == id);
+            var blog = await _context.Blogs
+            .Include(blog => blog.User)
+            .Include(blog => blog.Category)
+            .FirstOrDefaultAsync(blog => blog.Id == id);
             if (blog == null)
             {
                 throw new NotFoundException("Blog not found");
