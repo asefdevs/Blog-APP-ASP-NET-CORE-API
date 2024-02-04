@@ -1,9 +1,6 @@
 namespace newProject.Models;
-using newProject.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
+using newProject.Helpers.Dto;
 
 public class BlogResponse
 {
@@ -19,5 +16,7 @@ public class BlogResponse
     public DateTime UpdatedAt { get; set; }
 
     public UserResponse? User { get; set; }
+
+    public CategoryDto? Category { get; set; }
         
 }

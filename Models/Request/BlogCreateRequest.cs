@@ -10,4 +10,7 @@ public class BlogCreateRequest
 
     public string Content { get; set; } 
 
+    [Required(ErrorMessage = "Category is required")]
+    public int CategoryId { get; set; }
+
 }
