@@ -12,13 +12,10 @@ namespace newProject.Services
     public interface IUserService
     {
         Task<List<UserResponse>> AllUsers();
-        Task<UserResponse> CreateUser(UserCreateRequest model);
 
         Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model);
 
         Task<UserResponse> GetUserById(int id);
-
-        Task<LoginResponse> Login(LoginRequest model);  
 
         Task<UserResponse> MyProfile(ClaimsPrincipal user);
     }
@@ -42,37 +39,6 @@ namespace newProject.Services
             return _mapper.Map<List<UserResponse>>(users);
         }
 
-        public async Task<UserResponse> CreateUser(UserCreateRequest model)
-        {
-            if (await _context.Users.AnyAsync(x => x.UserName == model.UserName))
-            {
-                throw new Exception("Username " + model.UserName + " is already taken");
-            }
-
-            if (await _context.Users.AnyAsync(x => x.Email == model.Email))
-            {
-                throw new Exception("Email " + model.Email + " is already taken");
-            }
-
-            if (model.Password != model.Password2)
-            {
-                throw new Exception("Password and Confirm Password does not match");
-            }
-
-            var userEntity = new User
-            {
-                UserName = model.UserName,
-                Email = model.Email,
-                Password = model.Password,
-                IsAdmin = model.IsAdmin,
-                IsActive = model.IsActive,
-            };
-
-            _context.Users.Add(userEntity);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<UserResponse>(userEntity);
-        }
 
         public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model)
         {
@@ -130,17 +96,6 @@ namespace newProject.Services
 
             return _mapper.Map<UserResponse>(userEntity);
         }
-
-        public async Task<LoginResponse> Login(LoginRequest model)
-        {
-            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName && x.Password == model.Password);
-
-            if (userEntity == null) return null;
-            var token  = _jwtUtils.GenerateToken(userEntity);
-
-            return  new LoginResponse(userEntity, token);
-        }
-
         public async Task<UserResponse> MyProfile(ClaimsPrincipal user)
         {
            

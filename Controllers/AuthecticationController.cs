@@ -12,13 +12,13 @@ using newProject.Models;
 public class AuthenticationController:ControllerBase
 {
     public  readonly MyprojectdbContext _context;
-    private readonly IUserService _userservice;
+    private readonly IAuthenticationService _authenticationService;
 
 
-    public AuthenticationController(MyprojectdbContext context, IUserService userService)
+    public AuthenticationController(MyprojectdbContext context, IAuthenticationService authenticationService)
     {
         _context = context;
-        _userservice = userService;
+        _authenticationService = authenticationService;
 
     }
 
@@ -27,7 +27,7 @@ public class AuthenticationController:ControllerBase
 
     public async Task<IActionResult> Login(LoginRequest model)
     {
-        var user = await _userservice.Login(model);
+        var user = await _authenticationService.Login(model);
         if (user == null)
         {
             return BadRequest(new { message = "Username or Password is incorrect"});
@@ -41,7 +41,7 @@ public class AuthenticationController:ControllerBase
     {
         try 
         {
-            var user = await _userservice.CreateUser(model);
+            var user = await _authenticationService.CreateUser(model);
             return Ok(user);
         }
         catch (Exception ex)
