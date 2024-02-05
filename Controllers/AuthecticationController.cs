@@ -49,6 +49,21 @@ public class AuthenticationController:ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    [HttpPost]
+    [Route("GenerateTotp")]
+    public async Task<IActionResult> GenerateTotp()
+    {
+        var totp = await _authenticationService.GenerateTotp();
+        return Ok(totp);
+    }
+
+    [HttpPost]
+    [Route("VerifyTotp")]
+    public async Task<IActionResult> VerifyTotp(VerifyTotpRequest model)
+    {
+        return await _authenticationService.VerifyTotp(model);
+    }
     
 
 }
