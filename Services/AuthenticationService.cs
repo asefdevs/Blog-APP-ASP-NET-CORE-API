@@ -3,6 +3,8 @@ using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 
@@ -14,7 +16,7 @@ namespace newProject.Services
 
         Task<LoginResponse> Login(LoginRequest model);  
         Task<GenerateTOTPResponse> GenerateTotp();
-        Task<IActionResult> VerifyTotp(VerifyTotpRequest model);
+        Task<bool> VerifyTotp(VerifyTotpRequest model);
 
     }
 
@@ -86,14 +88,11 @@ namespace newProject.Services
             return new GenerateTOTPResponse(secretKey, totpCode);
         }
 
-        public async Task<IActionResult> VerifyTotp(VerifyTotpRequest model)
+        public async Task<bool> VerifyTotp(VerifyTotpRequest model)
         {
             var isVerified = _totpservice.VerifyTotpCode(model.totpCode, model.secretKey);
-            if (isVerified)
-            {
-                return new OkObjectResult("TOTP code is verified");
-            }
-            return new BadRequestObjectResult("TOTP code is not verified");
+            return isVerified;
+            
         }
 
     }

@@ -62,7 +62,12 @@ public class AuthenticationController:ControllerBase
     [Route("VerifyTotp")]
     public async Task<IActionResult> VerifyTotp(VerifyTotpRequest model)
     {
-        return await _authenticationService.VerifyTotp(model);
+        var result = await _authenticationService.VerifyTotp(model);
+        if (result)
+        {
+            return Ok(new { message = "TOTP is verified"});
+        }
+        return BadRequest(new { message = "TOTP is not verified"});
     }
     
 
