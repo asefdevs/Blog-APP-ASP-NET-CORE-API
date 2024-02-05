@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 
 
@@ -12,6 +13,8 @@ namespace newProject.Services
         Task<UserResponse> CreateUser(UserCreateRequest model);
 
         Task<LoginResponse> Login(LoginRequest model);  
+        Task<GenerateTOTPResponse> GenerateTotp();
+        Task<IActionResult> VerifyTotp(VerifyTotpRequest model);
 
     }
 
@@ -21,11 +24,14 @@ namespace newProject.Services
         private readonly IMapper _mapper;
         private readonly JwtUtils _jwtUtils;
 
-        public AuthenticationService(MyprojectdbContext context, IMapper mapper, JwtUtils jwtUtils)
+        private readonly TOTP _totpservice;
+
+        public AuthenticationService(MyprojectdbContext context, IMapper mapper, JwtUtils jwtUtils, TOTP totpservice)
         {
             _context = context;
             _mapper = mapper;
             _jwtUtils = jwtUtils;
+            _totpservice = totpservice;
         }
 
 
@@ -73,6 +79,22 @@ namespace newProject.Services
             return  new LoginResponse(userEntity, token);
         }
 
+        public async Task<GenerateTOTPResponse> GenerateTotp()
+        {
+            var secretKey = _totpservice.GenerateRandomKey();
+            var totpCode = _totpservice.GenerateTotpCode(secretKey);
+            return new GenerateTOTPResponse(secretKey, totpCode);
+        }
+
+        public async Task<IActionResult> VerifyTotp(VerifyTotpRequest model)
+        {
+            var isVerified = _totpservice.VerifyTotpCode(model.totpCode, model.secretKey);
+            if (isVerified)
+            {
+                return new OkObjectResult("TOTP code is verified");
+            }
+            return new BadRequestObjectResult("TOTP code is not verified");
+        }
 
     }
 }

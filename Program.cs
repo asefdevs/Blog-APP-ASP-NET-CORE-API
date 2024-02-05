@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
 using System.Text.Json;
 
 
@@ -64,6 +62,7 @@ builder.Services.AddScoped<IHelperService, HelperService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<JwtUtils>();
+builder.Services.AddScoped<TOTP>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
