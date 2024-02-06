@@ -2,9 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 
 
 
@@ -15,7 +13,7 @@ namespace newProject.Services
         Task<UserResponse> CreateUser(UserCreateRequest model);
 
         Task<LoginResponse> Login(LoginRequest model);  
-        Task<GenerateTOTPResponse> GenerateTotp();
+        Task<GenerateTOTPResponse> GenerateTotp(GenerateTOTPRequest model);
         Task<bool> VerifyTotp(VerifyTotpRequest model);
 
     }
@@ -81,15 +79,36 @@ namespace newProject.Services
             return  new LoginResponse(userEntity, token);
         }
 
-        public async Task<GenerateTOTPResponse> GenerateTotp()
+        public async Task<GenerateTOTPResponse> GenerateTotp(GenerateTOTPRequest model)
         {
+            var userEntity = await _context.Users.FirstOrDefaultAsync(
+            x => x.UserName == model.UserName && x.Email == model.Email && x.IsActive == false);
+            if (userEntity != null)
+            {
             var secretKey = _totpservice.GenerateRandomKey();
             var totpCode = _totpservice.GenerateTotpCode(secretKey);
             return new GenerateTOTPResponse(secretKey, totpCode);
+            }
+            else
+            {
+                throw new Exception("User not found");
+            }
         }
 
         public async Task<bool> VerifyTotp(VerifyTotpRequest model)
         {
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.email);
+            if (userEntity == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (userEntity.IsActive == true)
+            {
+                throw new Exception("User is already verified");
+            }
+            userEntity.IsActive = true;
+            _context.Users.Update(userEntity);
+            await _context.SaveChangesAsync();
             var isVerified = _totpservice.VerifyTotpCode(model.totpCode, model.secretKey);
             return isVerified;
             

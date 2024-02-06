@@ -3,6 +3,9 @@ namespace newProject.Controllers;
 using newProject.Entities;
 using newProject.Services;
 using newProject.Models;
+using System.Threading.Tasks;
+using AutoMapper;
+using System.Security.Claims;
 
 
 
@@ -52,22 +55,39 @@ public class AuthenticationController:ControllerBase
 
     [HttpPost]
     [Route("GenerateTotp")]
-    public async Task<IActionResult> GenerateTotp()
+    public async Task<IActionResult> GenerateTotp(GenerateTOTPRequest model)
     {
-        var totp = await _authenticationService.GenerateTotp();
-        return Ok(totp);
+        try
+        {
+            var totp = await _authenticationService.GenerateTotp(model);
+            return Ok(totp);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpPost]
     [Route("VerifyTotp")]
     public async Task<IActionResult> VerifyTotp(VerifyTotpRequest model)
     {
-        var result = await _authenticationService.VerifyTotp(model);
-        if (result)
+
+        try
         {
-            return Ok(new { message = "TOTP is verified"});
+            var result = await _authenticationService.VerifyTotp(model);
+            if (result)
+            {
+                return Ok(new { message = "TOTP is verified"});
+            }
+            return BadRequest(new { message = "TOTP is not verified"});
         }
-        return BadRequest(new { message = "TOTP is not verified"});
+        catch (Exception ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        
+    
     }
     
 
