@@ -58,8 +58,6 @@ namespace newProject.Services
                 UserName = model.UserName,
                 Email = model.Email,
                 Password = model.Password,
-                IsAdmin = model.IsAdmin,
-                IsActive = model.IsActive,
             };
 
             _context.Users.Add(userEntity);
@@ -71,9 +69,19 @@ namespace newProject.Services
 
         public async Task<LoginResponse> Login(LoginRequest model)
         {
-            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName && x.Password == model.Password);
+            var userEntity = await _context.Users.FirstOrDefaultAsync(
+            x => x.UserName == model.UserName && 
+            x.Password == model.Password 
+            );
 
-            if (userEntity == null) return null;
+            if (userEntity == null)
+            {
+                throw new Exception("Username or Password is incorrect");
+            }
+            if (userEntity.IsActive == false)
+            {
+                throw new Exception("No active user found");
+            }
             var token  = _jwtUtils.GenerateToken(userEntity);
 
             return  new LoginResponse(userEntity, token);
@@ -82,16 +90,20 @@ namespace newProject.Services
         public async Task<GenerateTOTPResponse> GenerateTotp(GenerateTOTPRequest model)
         {
             var userEntity = await _context.Users.FirstOrDefaultAsync(
-            x => x.UserName == model.UserName && x.Email == model.Email && x.IsActive == false);
-            if (userEntity != null)
+            x => x.UserName == model.UserName && x.Email == model.Email);
+            if (userEntity == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (userEntity.IsActive == true)
+            {
+                throw new Exception("User is already verified");
+            }
+            else
             {
             var secretKey = _totpservice.GenerateRandomKey();
             var totpCode = _totpservice.GenerateTotpCode(secretKey);
             return new GenerateTOTPResponse(secretKey, totpCode);
-            }
-            else
-            {
-                throw new Exception("User not found");
             }
         }
 
@@ -102,14 +114,18 @@ namespace newProject.Services
             {
                 throw new Exception("User not found");
             }
-            if (userEntity.IsActive == true)
+            var isVerified = _totpservice.VerifyTotpCode(model.totpCode, model.secretKey);
+            // if (userEntity.IsActive == true)
+            // {
+            //     throw new Exception("User is already verified");
+            // }
+            if (isVerified == false)
             {
-                throw new Exception("User is already verified");
+                return false;
             }
             userEntity.IsActive = true;
             _context.Users.Update(userEntity);
             await _context.SaveChangesAsync();
-            var isVerified = _totpservice.VerifyTotpCode(model.totpCode, model.secretKey);
             return isVerified;
             
         }

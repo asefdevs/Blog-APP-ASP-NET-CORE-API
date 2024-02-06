@@ -30,12 +30,16 @@ public class AuthenticationController:ControllerBase
 
     public async Task<IActionResult> Login(LoginRequest model)
     {
-        var user = await _authenticationService.Login(model);
-        if (user == null)
+        try
         {
-            return BadRequest(new { message = "Username or Password is incorrect"});
+            var user = await _authenticationService.Login(model);
+            return Ok(user);
         }
-        return Ok(user);
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        
     }
 
     [HttpPost]

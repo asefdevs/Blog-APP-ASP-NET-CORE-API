@@ -16,14 +16,14 @@ namespace newProject.Services
 
         public string GenerateTotpCode(byte[] secretKey)
         {
-            var totp = new OtpNet.Totp(secretKey, step: 15, totpSize: 6);
+            var totp = new OtpNet.Totp(secretKey, step: 10, totpSize: 6);
             var totpCode = totp.ComputeTotp(DateTime.UtcNow);
             return totpCode;
         }
 
         public bool VerifyTotpCode(string totpCode, byte[] secretKey)
         {
-            var totp = new OtpNet.Totp(secretKey, step: 15, totpSize: 6);
+            var totp = new OtpNet.Totp(secretKey, step: 10, totpSize: 6);
             return totp.VerifyTotp(totpCode, out long timeStepMatched, new VerificationWindow(2, 2));
         }
     }
