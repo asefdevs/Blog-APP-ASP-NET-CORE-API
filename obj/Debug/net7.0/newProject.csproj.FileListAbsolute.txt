@@ -79,3 +79,4 @@
 /home/asef/Desktop/newProject/bin/Debug/net7.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 /home/asef/Desktop/newProject/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /home/asef/Desktop/newProject/bin/Debug/net7.0/Otp.NET.dll
+/home/asef/Desktop/newProject/bin/Debug/net7.0/newProject.staticwebassets.runtime.json

@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "/home/asef/Desktop/newProject/wwwroot/images/c1f94d7a-318b-49ec-84d5-f2ddbe2d0ae0.png",
+      "PackagePath": "staticwebassets/images/c1f94d7a-318b-49ec-84d5-f2ddbe2d0ae0.png"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.build.newProject.props",
+      "PackagePath": "build\\newProject.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.newProject.props",
+      "PackagePath": "buildMultiTargeting\\newProject.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.newProject.props",
+      "PackagePath": "buildTransitive\\newProject.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.newProject.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

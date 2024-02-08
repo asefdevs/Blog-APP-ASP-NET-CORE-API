@@ -1,11 +1,37 @@
 {
   "Version": 1,
-  "Hash": "aLXOks8i279RMsdiJEKvZm+oODb6CSrq//IeiADmWdU=",
+  "Hash": "xD7J8LQ2RyHR9I3PXVWxHXKfPK4WcnD72aLKDTjkMJA=",
   "Source": "newProject",
   "BasePath": "_content/newProject",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "newProject/wwwroot",
+      "Source": "newProject",
+      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "BasePath": "_content/newProject",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/asef/Desktop/newProject/wwwroot/images/c1f94d7a-318b-49ec-84d5-f2ddbe2d0ae0.png",
+      "SourceId": "newProject",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "BasePath": "_content/newProject",
+      "RelativePath": "images/c1f94d7a-318b-49ec-84d5-f2ddbe2d0ae0.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/c1f94d7a-318b-49ec-84d5-f2ddbe2d0ae0.png"
+    }
+  ]
 }

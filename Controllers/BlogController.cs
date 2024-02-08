@@ -22,16 +22,21 @@ public class BlogController:ControllerBase
 {
     public readonly MyprojectdbContext _context;
     private readonly IBlogService _blogService;
-
-
     private readonly IMapper _mapper;
+    private readonly IWebHostEnvironment _environment; 
 
     
-    public BlogController(MyprojectdbContext context, IBlogService blogService, IMapper mapper)
+    public BlogController(
+        MyprojectdbContext context,
+        IBlogService blogService,
+        IMapper mapper,
+        IWebHostEnvironment environment
+        )
     {
         _context = context;
         _blogService = blogService;
         _mapper =  mapper;
+        _environment = environment;
 
 
     }
@@ -152,4 +157,41 @@ public class BlogController:ControllerBase
             return Ok("All blogs deleted successfully.");
         }
     }
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage([FromForm] ImageUploadRequest model)
+        {
+            if (model == null || model.File == null || model.File.Length == 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            var blog = await _context.Blogs.FindAsync(model.BlogId);
+            if (blog == null)
+            {
+                return NotFound("Blog not found");
+            }
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.File.FileName)}";
+            var filePath = Path.Combine("wwwroot", "images", fileName); // Assuming images will be stored in wwwroot/images folder
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            var image = new Image
+            {
+                ImageName = fileName,
+                ImagePath = filePath,
+                BlogId = model.BlogId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            _context.Images.Add(image);
+            await _context.SaveChangesAsync();
+
+            return Ok("Image uploaded successfully.");
+        }
+    
+
 }

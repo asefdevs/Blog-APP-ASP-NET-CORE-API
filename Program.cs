@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        
     });
 
 
