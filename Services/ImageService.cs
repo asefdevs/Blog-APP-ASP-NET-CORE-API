@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
@@ -7,7 +8,7 @@ namespace newProject.Services
 {
     public interface IImageService
     {
-        Task<ImageUploadResponse> UploadImage(ImageUploadRequest model);
+        Task<ImageUploadResponse> UploadImage(ImageUploadRequest model, int userId);
     }
 
     public class ImageService:IImageService
@@ -23,18 +24,24 @@ namespace newProject.Services
     }
 
 
-    public async Task<ImageUploadResponse> UploadImage(ImageUploadRequest model)
+    public async Task<ImageUploadResponse> UploadImage(ImageUploadRequest model, int userId)
     {
-        if (model.File == null)
-        {
-            throw new Exception("Image is required");
-        }
+        var user = await _context.Users.FindAsync(userId);
 
         var blog = await _context.Blogs.FindAsync(model.BlogId);
         if (blog == null)
         {
             throw new Exception("Blog not found");
         }
+        if (blog.User != user)
+        {
+            throw new Exception("You are not allowed to upload image for this blog");
+        }
+        if (model.File == null)
+        {
+            throw new Exception("Image is required");
+        }
+
 
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.File.FileName);
         var filePath = Path.Combine("wwwroot", "images", fileName);

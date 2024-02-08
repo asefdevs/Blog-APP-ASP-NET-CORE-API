@@ -161,12 +161,15 @@ public class BlogController:ControllerBase
         }
     }
     [HttpPost]
+    [Authorize]
     [Route("UploadImage")]
     public async Task<IActionResult> UploadImage([FromForm] ImageUploadRequest model)
     {
+        ClaimsPrincipal user =  HttpContext.User;
+        var userId = ClaimsHelper.RequestedUser(user);
         try
         {
-            var image = await _imageService.UploadImage(model);
+            var image = await _imageService.UploadImage(model, userId.Value);
             return Ok(image);
         }
         catch (Exception ex)
