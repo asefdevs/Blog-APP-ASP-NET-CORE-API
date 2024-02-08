@@ -18,5 +18,10 @@ public class MappingProfiles : Profile
 
         CreateMap<Category, CategoryDto>().ReverseMap();
 
+        CreateMap<Image, ImageUploadResponse>()
+            .ForMember(dest => dest.ImageName, opt => opt.MapFrom(src => src.ImageName))
+            .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(src => src.ImagePath))
+            .ReverseMap();
+
     }
 }

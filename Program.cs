@@ -62,6 +62,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHelperService, HelperService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<JwtUtils>();
 builder.Services.AddScoped<TOTP>();
 
