@@ -95,10 +95,10 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
 }
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseRouting();
-app.UseStaticFiles();
 
 app.UseCors(); //
 

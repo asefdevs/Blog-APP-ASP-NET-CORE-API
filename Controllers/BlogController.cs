@@ -12,9 +12,6 @@ using System;
 using System.Security.Claims;
 using newProject.Exceptions;
 
-
-
-
 [ApiController]
 [Route("[controller]")]
 
@@ -24,24 +21,20 @@ public class BlogController:ControllerBase
     private readonly IBlogService _blogService;
     private readonly IImageService _imageService;
     private readonly IMapper _mapper;
-    private readonly IWebHostEnvironment _environment; 
+    
 
     
     public BlogController(
         MyprojectdbContext context,
         IBlogService blogService,
         IImageService imageService,
-        IMapper mapper,
-        IWebHostEnvironment environment
+        IMapper mapper
         )
     {
         _context = context;
         _blogService = blogService;
         _imageService = imageService;
         _mapper =  mapper;
-        _environment = environment;
-
-
     }
 
 
@@ -177,6 +170,28 @@ public class BlogController:ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+    
+    [HttpGet("GetBlogImages/{blogId}")]
+    public async Task<IActionResult> GetImagesByBlogId(int blogId)
+    {
+        var blog = await _context.Blogs.FindAsync(blogId);
+
+        if (blog == null)
+        {
+            return NotFound("Blog not found");
+        }
+
+        var images = await _context.Images
+            .Where(image => image.BlogId == blogId)
+            .ToListAsync();
+
+        // Construct a list of image URLs
+        var imageUrls = images.Select(image => Url.Content($"~/images/{image.ImageName}")).ToList();
+
+        return Ok(imageUrls);
+    }
+
+    
     
 
 }

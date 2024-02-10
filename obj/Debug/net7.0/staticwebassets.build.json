@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "QE1NVsdtl6Ikx3LL4t15gDki+hdFa23z1O8XPH0U3us=",
+  "Hash": "/svyXfpj/J6Bqw0xOb0/94YZoa7iLej3QT0O2pThwhY=",
   "Source": "newProject",
   "BasePath": "_content/newProject",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "/home/asef/Desktop/newProject/wwwroot/images/81f64ce6-b949-4550-9630-be57e551439c.png",
+      "SourceId": "newProject",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "BasePath": "_content/newProject",
+      "RelativePath": "images/81f64ce6-b949-4550-9630-be57e551439c.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/81f64ce6-b949-4550-9630-be57e551439c.png"
+    },
     {
       "Identity": "/home/asef/Desktop/newProject/wwwroot/images/a9294958-4757-4ace-9097-74ac78019ae7.png",
       "SourceId": "newProject",
