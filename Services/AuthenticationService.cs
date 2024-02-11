@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using newProject.Entities;
 using newProject.Models;
 using AutoMapper;
+using BCrypt.Net;
 
 
 
@@ -57,7 +58,7 @@ namespace newProject.Services
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                Password = model.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
             };
 
             _context.Users.Add(userEntity);
@@ -70,13 +71,17 @@ namespace newProject.Services
         public async Task<LoginResponse> Login(LoginRequest model)
         {
             var userEntity = await _context.Users.FirstOrDefaultAsync(
-            x => x.UserName == model.UserName && 
-            x.Password == model.Password 
+            x => x.UserName == model.UserName
             );
 
             if (userEntity == null)
             {
-                throw new Exception("Username or Password is incorrect");
+                throw new Exception("User Not found");
+            }
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(model.Password, userEntity.Password);
+            if (!isValidPassword)
+            {
+                throw new Exception("Invalid Password");
             }
             if (userEntity.IsActive == false)
             {

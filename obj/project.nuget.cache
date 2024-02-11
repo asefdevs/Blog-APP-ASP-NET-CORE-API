@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "V6zU/f0/FAA8J9TTsLGfODQEBfdU54TK7/DvXjJu8xoo61r+43S90puVf2GvZVOzXUH3h6EBeQ3Bvzv02KiQ3w==",
+  "dgSpecHash": "7XuT/dnvCQK5o0Z96ejEO7Epin8NUJeOB4tcgoQae45JU6tyMASm0aMvXNmWXbxDVP4IP6VOdjJHyYB13IsSBw==",
   "success": true,
   "projectFilePath": "/home/asef/Desktop/newProject/newProject.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "/home/asef/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "/home/asef/.nuget/packages/azure.core/1.25.0/azure.core.1.25.0.nupkg.sha512",
     "/home/asef/.nuget/packages/azure.identity/1.7.0/azure.identity.1.7.0.nupkg.sha512",
+    "/home/asef/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/asef/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/asef/.nuget/packages/microsoft.aspnetcore.authentication/2.2.0/microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "/home/asef/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.2.0/microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
