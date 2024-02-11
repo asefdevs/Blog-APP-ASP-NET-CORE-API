@@ -24,4 +24,6 @@ public partial class User
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    public virtual ICollection<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
 }

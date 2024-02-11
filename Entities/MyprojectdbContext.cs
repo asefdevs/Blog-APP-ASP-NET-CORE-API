@@ -25,6 +25,8 @@ public partial class MyprojectdbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserProfile> UserProfiles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
@@ -38,6 +40,7 @@ public partial class MyprojectdbContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Blogs_Categories");
 
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
@@ -115,6 +118,30 @@ public partial class MyprojectdbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<UserProfile>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UserProf__3214EC07FBD6AB0F");
+
+            entity.ToTable("UserProfile");
+
+            entity.Property(e => e.Bio).HasMaxLength(1000);
+            entity.Property(e => e.BirthDate).HasColumnType("date");
+            entity.Property(e => e.Country).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserProfiles)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserProfi__UserI__3E1D39E1");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -9,9 +9,9 @@ public partial class Category
 
     public string? Title { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 }

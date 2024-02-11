@@ -19,10 +19,11 @@ public partial class Blog
 
     public int CategoryId { get; set; }
 
+    public virtual Category Category { get; set; } = null!;
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 
-    public virtual Category Category { get; set; }
     public virtual User User { get; set; } = null!;
 }
