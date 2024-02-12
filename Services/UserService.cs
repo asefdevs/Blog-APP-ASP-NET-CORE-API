@@ -49,6 +49,7 @@ namespace newProject.Services
                     throw new ForbbidenAccessException("You are not allowed to update this user");
                 }
                 var userEntity = await _context.Users.FindAsync(id);
+                var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == id);
                 if (userEntity == null)
                 {
                     throw new NotFoundException("User not found");
@@ -87,7 +88,7 @@ namespace newProject.Services
 
         public async Task<UserResponse> GetUserById(int id)
         {
-            var userEntity = await _context.Users.FindAsync(id);
+            var userEntity = await _context.Users.Include(x => x.UserProfiles).FirstOrDefaultAsync(x => x.Id == id);
 
             if (userEntity == null)
             {

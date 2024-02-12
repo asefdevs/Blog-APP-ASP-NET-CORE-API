@@ -44,19 +44,19 @@ public class AuthenticationController:ControllerBase
 
     [HttpPost]
     [Route("Register")]
-    public async Task<IActionResult> Register(UserCreateRequest model)
+    public async Task<IActionResult> Register([FromBody] RegistrationRequest model)
     {
         try 
         {
-            var user = await _authenticationService.CreateUser(model);
+            var user = await _authenticationService.CreateUser(model.UserModel, model.ProfileModel);
             return Ok(user);
         }
         catch (Exception ex)
         {
-            return NotFound(new { message = ex.Message });
+            return BadRequest(new { message = ex.Message });
         }
     }
-
+   
     [HttpPost]
     [Route("GenerateTotp")]
     public async Task<IActionResult> GenerateTotp(GenerateTOTPRequest model)

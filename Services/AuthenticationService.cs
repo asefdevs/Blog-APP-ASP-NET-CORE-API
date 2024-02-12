@@ -11,7 +11,7 @@ namespace newProject.Services
 {
     public interface IAuthenticationService
     {
-        Task<UserResponse> CreateUser(UserCreateRequest model);
+        Task<UserResponse> CreateUser(UserCreateRequest userModel, ProfileCreateRequest profileModel);
 
         Task<LoginResponse> Login(LoginRequest model);  
         Task<GenerateTOTPResponse> GenerateTotp(GenerateTOTPRequest model);
@@ -37,34 +37,51 @@ namespace newProject.Services
 
 
 
-        public async Task<UserResponse> CreateUser(UserCreateRequest model)
+        public async Task<UserResponse> CreateUser(UserCreateRequest userModel, ProfileCreateRequest profileModel)
         {
-            if (await _context.Users.AnyAsync(x => x.UserName == model.UserName))
+            try
             {
-                throw new Exception("Username " + model.UserName + " is already taken");
+            if (await _context.Users.AnyAsync(x => x.UserName ==userModel.UserName))
+            {
+                throw new Exception("Username " + userModel.UserName + " is already taken");
             }
 
-            if (await _context.Users.AnyAsync(x => x.Email == model.Email))
+            if (await _context.Users.AnyAsync(x => x.Email == userModel.Email))
             {
-                throw new Exception("Email " + model.Email + " is already taken");
+                throw new Exception("Email " + userModel.Email + " is already taken");
             }
 
-            if (model.Password != model.Password2)
+            if (userModel.Password != userModel.Password2)
             {
                 throw new Exception("Password and Confirm Password does not match");
             }
 
             var userEntity = new User
             {
-                UserName = model.UserName,
-                Email = model.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
+                UserName = userModel.UserName,
+                Email = userModel.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password),
             };
-
             _context.Users.Add(userEntity);
+            await _context.SaveChangesAsync();
+            var userProfile = new UserProfile
+            {
+                UserId = userEntity.Id,
+                FirstName = profileModel.FirstName,
+                LastName = profileModel.LastName,
+                BirthDate = profileModel.BirthDate,
+                Country = profileModel.Country,
+                Bio = profileModel.Bio
+            };
+            _context.UserProfiles.Add(userProfile);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserResponse>(userEntity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 
