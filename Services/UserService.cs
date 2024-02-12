@@ -13,7 +13,7 @@ namespace newProject.Services
     {
         Task<List<UserResponse>> AllUsers();
 
-        Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model);
+        Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest profileModel);
 
         Task<UserResponse> GetUserById(int id);
 
@@ -35,12 +35,12 @@ namespace newProject.Services
 
         public async Task<List<UserResponse>> AllUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.Include(x => x.UserProfiles).ToListAsync();
             return _mapper.Map<List<UserResponse>>(users);
         }
 
 
-        public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model)
+        public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest profileModel)
         {
           
                 int? userId = ClaimsHelper.RequestedUser(user);
@@ -48,8 +48,7 @@ namespace newProject.Services
                 {
                     throw new ForbbidenAccessException("You are not allowed to update this user");
                 }
-                var userEntity = await _context.Users.FindAsync(id);
-                var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == id);
+                var userEntity = await _context.Users.Include(x => x.UserProfiles).FirstOrDefaultAsync(x => x.Id == id);
                 if (userEntity == null)
                 {
                     throw new NotFoundException("User not found");
@@ -65,25 +64,29 @@ namespace newProject.Services
                 {
                     throw new Exception("Username " + model.UserName + " is already taken");
                 }
-
-                if (!string.IsNullOrEmpty(model.UserName))
-                {
-                    userEntity.UserName = model.UserName;
-                }
-
-                if (!string.IsNullOrEmpty(model.Email))
-                {
-                    userEntity.Email = model.Email;
-                }
-
-
                 userEntity.UpdatedAt = DateTime.Now;
-
+                userEntity.Email = model.Email;
+                userEntity.UserName = model.UserName;
                 await _context.SaveChangesAsync();
 
+                if (profileModel != null)
+                {
+                    if (userEntity.UserProfiles.Count == 0)
+                    {
+                        userEntity.UserProfiles.Add(new UserProfile());
+                    }
+
+                    var userProfile = userEntity.UserProfiles.First(); 
+                    userProfile.FirstName = profileModel.FirstName;
+                    userProfile.LastName = profileModel.LastName;
+                    userProfile.BirthDate = profileModel.BirthDate;
+                    userProfile.Country = profileModel.Country;
+                    userProfile.Bio = profileModel.Bio;
+                }
+                await _context.SaveChangesAsync();
+
+
                 return _mapper.Map<UserResponse>(userEntity);
-            
-        
         }
 
         public async Task<UserResponse> GetUserById(int id)
@@ -101,7 +104,7 @@ namespace newProject.Services
         {
            
                 int? userId = ClaimsHelper.RequestedUser(user);
-                var userEntity = await _context.Users.FindAsync(userId);
+                var userEntity = await _context.Users.Include(x => x.UserProfiles).FirstOrDefaultAsync(x => x.Id == userId);
                 if (userEntity == null)
                 {
                     throw new NotFoundException("User not found");

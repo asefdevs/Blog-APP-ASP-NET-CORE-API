@@ -16,7 +16,6 @@ namespace newProject.Services
     {
         Task<List<CommentResponse>> AllComments(int blogId);
         Task<CommentResponse> CreateComment(CommentCreateRequest model, int userId);
-        // Task<CommentResponse> UpdateComment(int id, CommentUpdateRequest model);
     }
 
     public class CommentService : ICommentService

@@ -28,12 +28,12 @@ public class UserController:ControllerBase
     [HttpPut]
     [Authorize]
     [Route("UpdateUser/{id}")]
-    public async Task<IActionResult> UpdateUser(int id, UserUpdateRequest model)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] ProfileUpdate model)
     {
         try
         {
             ClaimsPrincipal user =  HttpContext.User;
-            var updatedUser = await _userService.UpdateUser(id, user, model);
+            var updatedUser = await _userService.UpdateUser(id, user, model );
             return Ok(updatedUser);
         }
         catch (ForbbidenAccessException ex)

@@ -93,7 +93,7 @@ namespace newProject.Services
 
             if (userEntity == null)
             {
-                throw new Exception("User Not found");
+                throw new Exception("Invalid Username");
             }
             bool isValidPassword = BCrypt.Net.BCrypt.Verify(model.Password, userEntity.Password);
             if (!isValidPassword)
