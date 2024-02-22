@@ -33,7 +33,7 @@ public class UserController:ControllerBase
         try
         {
             ClaimsPrincipal user =  HttpContext.User;
-            var updatedUser = await _userService.UpdateUser(id, user, model );
+            var updatedUser = await _userService.UpdateUser(id, user, model.UserModel, model.ProfileModel);
             return Ok(updatedUser);
         }
         catch (ForbbidenAccessException ex)

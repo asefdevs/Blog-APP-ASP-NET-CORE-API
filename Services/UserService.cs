@@ -13,7 +13,7 @@ namespace newProject.Services
     {
         Task<List<UserResponse>> AllUsers();
 
-        Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest profileModel);
+        Task<UserResponse> UpdateUser(int id,ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest? profileModel);
 
         Task<UserResponse> GetUserById(int id);
 
@@ -40,7 +40,7 @@ namespace newProject.Services
         }
 
 
-        public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest profileModel)
+        public async Task<UserResponse> UpdateUser(int id, ClaimsPrincipal user, UserUpdateRequest model, ProfileCreateRequest? profileModel)
         {
           
                 int? userId = ClaimsHelper.RequestedUser(user);

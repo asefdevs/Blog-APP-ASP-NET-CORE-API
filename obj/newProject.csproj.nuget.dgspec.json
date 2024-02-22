@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/asef/Desktop/newProject/newProject.csproj": {}
+    "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/newProject.csproj": {}
   },
   "projects": {
-    "/home/asef/Desktop/newProject/newProject.csproj": {
+    "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/newProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/asef/Desktop/newProject/newProject.csproj",
+        "projectUniqueName": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/newProject.csproj",
         "projectName": "newProject",
-        "projectPath": "/home/asef/Desktop/newProject/newProject.csproj",
+        "projectPath": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/newProject.csproj",
         "packagesPath": "/home/asef/.nuget/packages/",
-        "outputPath": "/home/asef/Desktop/newProject/obj/",
+        "outputPath": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/asef/.nuget/NuGet/NuGet.Config"
@@ -104,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/asef/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }

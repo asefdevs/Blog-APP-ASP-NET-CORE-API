@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/svyXfpj/J6Bqw0xOb0/94YZoa7iLej3QT0O2pThwhY=",
+  "Hash": "8vQmP13wUsfS/vTxZ+4rVAXf9Zlyb7Tmw2tMgGOE6+8=",
   "Source": "newProject",
   "BasePath": "_content/newProject",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "newProject/wwwroot",
       "Source": "newProject",
-      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "ContentRoot": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/wwwroot/",
       "BasePath": "_content/newProject",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/home/asef/Desktop/newProject/wwwroot/images/81f64ce6-b949-4550-9630-be57e551439c.png",
+      "Identity": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/wwwroot/images/81f64ce6-b949-4550-9630-be57e551439c.png",
       "SourceId": "newProject",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "ContentRoot": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/wwwroot/",
       "BasePath": "_content/newProject",
       "RelativePath": "images/81f64ce6-b949-4550-9630-be57e551439c.png",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot/images/81f64ce6-b949-4550-9630-be57e551439c.png"
     },
     {
-      "Identity": "/home/asef/Desktop/newProject/wwwroot/images/a9294958-4757-4ace-9097-74ac78019ae7.png",
+      "Identity": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/wwwroot/images/a9294958-4757-4ace-9097-74ac78019ae7.png",
       "SourceId": "newProject",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/asef/Desktop/newProject/wwwroot/",
+      "ContentRoot": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/wwwroot/",
       "BasePath": "_content/newProject",
       "RelativePath": "images/a9294958-4757-4ace-9097-74ac78019ae7.png",
       "AssetKind": "All",

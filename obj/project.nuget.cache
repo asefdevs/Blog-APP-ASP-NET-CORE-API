@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7XuT/dnvCQK5o0Z96ejEO7Epin8NUJeOB4tcgoQae45JU6tyMASm0aMvXNmWXbxDVP4IP6VOdjJHyYB13IsSBw==",
+  "dgSpecHash": "ss5ufjXGol6chZsLHq/yIswEY8HFZb5yei0K6kbJ5nnDmZ+vb0sO1HpXvnpD0LR9SE25KVZ4xAMbbL98t+GFKw==",
   "success": true,
-  "projectFilePath": "/home/asef/Desktop/newProject/newProject.csproj",
+  "projectFilePath": "/home/asef/Desktop/Projects/Blog-APP-ASP-NET-CORE-API/newProject.csproj",
   "expectedPackageFiles": [
     "/home/asef/.nuget/packages/automapper/12.0.1/automapper.12.0.1.nupkg.sha512",
     "/home/asef/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
