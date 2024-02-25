@@ -4,7 +4,6 @@ using newProject.Helpers.Dto;
 
 public class BlogResponse
 {
-
     public int Id { get; set; }
 
     public string Title { get; set; } = null!;
